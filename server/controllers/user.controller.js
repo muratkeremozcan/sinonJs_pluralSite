@@ -5,7 +5,7 @@ const responses = require('../responses');
 const CrudController = require('./crud.controller');
 
 module.exports = new CrudController(User, {
-  create: (req, res) => { // creates a wish list and a user with parameters from the request body
+  create: (req, res) => {
     return Wishlist.create({
       name: `${req.body.firstName}'s List`
     }).then((wishlist) => {

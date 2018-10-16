@@ -1,19 +1,22 @@
 const expect = require('chai').expect;
-const httpMocks = require('node-mocks-http'); // Mock 'http' objects for testing Express and Koa routing functions, but could be used for testing any Node.js web server applications that have code that requires mockups of the request and response objects. https://www.npmjs.com/package/node-mocks-http
-const controller = require('./book.controller');
-const model = require('../models').book;
-const transaction = require('../models').transaction;
-var sinon = require('sinon');
+const httpMocks = require('node-mocks-http');
+const sinon = require('sinon');
+const controller = require('../server/controllers/book.controller');
+const model = require('../server/models').book;
+const transaction = require('../server/models').transaction;
 
+describe('Books controller', () => {
+  afterEach(() => {
+    model.findById.restore && model.findById.restore();
+  });
 
-describe.only('Books controller', () => {
   describe('When getting a list of books', () => {
     it('Should return 4 books', () => {
       const req = httpMocks.createRequest();
       const res = httpMocks.createResponse();
 
       // sinon.stub(objectToStub, 'methodToStub').resolves('value / array / object / function')
-      sinon.stub(model, 'all').resolves([{}, {}, {}, {}]); // the objects can be empty because we are only checking the count
+      sinon.stub(model, 'all').resolves([{}, {}, {}, {}]);  // the objects can be empty because we are only checking the count
       return controller.list(req, res).then(() => {
         return expect(res._getData().length).to.eql(4);
       });
@@ -40,6 +43,7 @@ describe.only('Books controller', () => {
         // return expect(res._getData().dataValues.title).to.eql(book.title);
         // return expect(model.create.called).to.be.true; // expect(mySpy.called).to.be.true . This was checking just that it was called
         expect(model.create.args[0][0].title).to.equal('Test Book'); // expect(mySpy.args[0][0].to.equal('argValueAtCoordinate')  . This is checking it's called and the specific value of the property
+        // return expect(model.create.called).to.be.true;
       });
     });
   });

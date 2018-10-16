@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function () {
   return {
@@ -9,12 +9,11 @@ module.exports = function () {
       './server/responses.js',
       './server/controllers/crud.controller.js',
       './server/controllers/user.controller.js',
-      // './server/controllers/book.controller.js',
+      './server/controllers/book.controller.js',
     ],
 
     tests: [
-      './server/**/user.controller.spec.js',
-      // './server/**/book.controller.spec.js',
+      './test/*.spec.js',
     ],
 
     env: {

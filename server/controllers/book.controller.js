@@ -2,7 +2,7 @@ const responses = require('../responses');
 const CrudController = require('./crud.controller');
 
 const Book = require('../models').book;
-const Transaction = require ('../models').transaction;
+const Transaction = require('../models').transaction;
 
 module.exports = new CrudController(Book, {
 

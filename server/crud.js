@@ -51,8 +51,8 @@ module.exports = {
   },
 
   list: model => (req, res) => {
-    return model.all()  // tries to get all the books from the db
-      .then(responses.ok(res)) // calls responses.ok and passes in the data it got, which sends the values from the db as a response
+    return model.all()
+      .then(responses.ok(res))
       .catch((err) => {
         responses.serverError(res)(err);
       });
