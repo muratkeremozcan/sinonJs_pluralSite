@@ -5,7 +5,7 @@ const getPrices = (price, currency, callback) => {
     method: 'GET'
   };
 
-  $.ajax(settings).done(function (response) {
+  $.ajax(settings).done(function (response) { // there is an XMLHttpRequest in the ajax call
     for (var key in response.rates) {
       if(key === currency){
         callback((response.rates[key] * price).toFixed(2));

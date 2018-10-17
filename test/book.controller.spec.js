@@ -6,8 +6,11 @@ const model = require('../server/models').book;
 const transaction = require('../server/models').transaction;
 
 describe('Books controller', () => {
+  const sandbox = sinon.createSandbox(); // creating the sandbox. Sandbox has the ability to create spies, stubs and mocks
   afterEach(() => {
-    model.findById.restore && model.findById.restore();
+    // model.findById.restore && model.findById.restore();
+    // SANDBOX VERSION
+    sandbox.restore(); // with the sandbox.restore(), you don't have to check if the restore is function before calling it
   });
 
   describe('When getting a list of books', () => {
@@ -59,8 +62,12 @@ describe('Books controller', () => {
 
         const res = httpMocks.createResponse();
 
-        // sinon.stub(objectToStub, 'methodToStub').resolves('value / array / object / function')
-        const find = sinon.stub(model, 'findById'); // stubbing the findById() function of model, which getById is using on crud.js
+        // // sinon.stub(objectToStub, 'methodToStub').resolves('value / array / object / function')
+        // const find = sinon.stub(model, 'findById'); // stubbing the findById() function of model, which getById is using on crud.js
+        // find.withArgs(7).resolves(null); // configure the stub for the case of id 7 being passed in. Null will simulate not being able to find it
+
+        // SANDBOX VERSION
+        const find = sandbox.stub(model, 'findById'); // replaced sinon with sandbox variable. You still are creating a stub, but you are placing that stub into your sandbox
         find.withArgs(7).resolves(null); // configure the stub for the case of id 7 being passed in. Null will simulate not being able to find it
 
         return controller.getById(req, res).then(() => {
@@ -80,8 +87,13 @@ describe('Books controller', () => {
         });
 
         const res = httpMocks.createResponse();
+
         // sinon.stub(objectToStub, 'methodToStub').resolves('value / array / object / function')
-        const find = sinon.stub(model, 'findById'); // stubbing the findById() function of model, which getById is using on crud.js
+        // const find = sinon.stub(model, 'findById'); // stubbing the findById() function of model, which getById is using on crud.js
+
+        // SANDBOX VERSION
+        const find = sandbox.stub(model, 'findById'); // replaced sinon with sandbox variable. You still are creating a stub, but you are placing that stub into your sandbox
+
         find.resolves({
           id: 7
         }); // configure the stub to resolve when id: 7 is passed in

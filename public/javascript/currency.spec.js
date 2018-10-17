@@ -5,20 +5,20 @@ const expect = chai.expect;
 describe('Currency Tests', () => {
   let xhr, requests;
   beforeEach(() => {
-    xhr = sinon.useFakeXMLHttpRequest();
-
+    // we do not want to hit the real API (because of costs) , so we have to create a fake request
+    xhr = sinon.useFakeXMLHttpRequest(); //  sinon.useFakeXMLHttpRequest() replaces XMLHttpRequest of the browser with Sinon's xhr . Also returns an object to use for more information
+    // the fake xhr object has several properties: URL, http method/verb, headers, body, username, password
     requests = [];
 
-    xhr.onCreate = (xhr) => {
-      requests.push(xhr);
+    xhr.onCreate = (xhr) => { // in order to work with fake request, you need to capture them with xhr.onCreate
+      requests.push(xhr); // here the requests are captured in the requests array
     };
   });
 
   afterEach(() => {
-    xhr.restore && xhr.restore();
+    xhr.restore && xhr.restore(); // need to restore the xhr object . Similar to stub best practice, cleaning up
   });
   it('Should return the same price when converting to USD', (done) => {
-
 
     const cb = (price) => { // the callback is going to receive the price
       try{
@@ -30,9 +30,17 @@ describe('Currency Tests', () => {
     };
     getPrices(10, 'USD', cb); // cb is the callback getPrices will call once it's done fetching the data
 
-    const request = requests[0];
-    request.respond(200, {'Content-Type': 'application/json'},
-      '{ "rates": {"USD": 1} }');
+    const request = requests[0]; // create a request by grabbing the first object in the requests array
+
+    // the fake xhr object also gives you 2 functions
+    // .error to simulate a fake network error
+    // .respond to respond with status, header, body
+    // request.setStatus(200);
+    // request.setResponseHeaders({'Content-Type': 'application/json'});
+    // request.setResponseBody('{ "rates": {"USD": 1} }');
+    // request.respond();
+
+    request.respond(200, {'Content-Type': 'application/json'}, '{ "rates": {"USD": 1} }'); // tell the request how to respond
 
   });
 });
